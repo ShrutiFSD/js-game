@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Color Game</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Guess the Color 🎨</h1>
+        <p id="rgbDisplay">RGB(???, ???, ???)</p>
+
+        <div id="colorGrid" class="color-grid">
+            <div class="color-box"></div>
+            <div class="color-box"></div>
+            <div class="color-box"></div>
+            <div class="color-box"></div>
+            <div class="color-box"></div>
+            <div class="color-box"></div>
+        </div>
+
+        <p id="message"></p>
+        <button onclick="restartFunction()">Restart Game</button>
+    </div>
+
+    <script>
+        // make random color
+        function makeColor() {
+            let r = Math.floor(Math.random() * 256);
+            let g = Math.floor(Math.random() * 256);
+            let b = Math.floor(Math.random() * 256);
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        let correctColor;
+
+        // set colors on boxes
+        function setColors() {
+            document.getElementById("message").innerHTML = "";
+            let boxes = document.getElementsByClassName("color-box");
+            let colors = [];
+
+            for (let i = 0; i < boxes.length; i++) {
+                let color = makeColor();
+                boxes[i].style.backgroundColor = color;
+                colors.push(color);
+            }
+
+            correctColor = colors[Math.floor(Math.random() * colors.length)];
+            document.getElementById("rgbDisplay").innerHTML = correctColor.toUpperCase();
+        }
+
+        // when user clicks on a box
+        function addClickEvents() {
+            let boxes = document.getElementsByClassName("color-box");
+            for (let i = 0; i < boxes.length; i++) {
+                boxes[i].onclick = function () {
+                    let chosen = this.style.backgroundColor;
+                    if (chosen === correctColor) {
+                        document.getElementById("message").textContent = "🎉 Correct!";
+                        document.body.style.background = correctColor;
+                        for (let j = 0; j < boxes.length; j++) {
+                            boxes[j].style.backgroundColor = correctColor;
+                        }
+                    } else {
+                        document.getElementById("message").textContent = "❌ Try Again!";
+                        this.style.opacity = 0.3;
+                    }
+                };
+            }
+        }
+
+        function restartFunction() {
+            setColors();
+        addClickEvents();
+
+        }
+
+        // start game
+        setColors();
+        addClickEvents();
+    </script>
+</body>
+
+</html>
